@@ -32,11 +32,12 @@ resp = session.post(login_url, data={
 if resp.status_code not in (200, 302):
     resp.raise_for_status()
 
-# 2. Fetch the jobs_log page (session cookie carries automatically)
+# 2. Fetch the jobs_log page
 page_url = f"{BASE_URL}/rpsigns/aspx/default.aspx?xml=jobs_log"
-page = session.get(page_url, timeout=30)
+page = session.get(page_url, timeout=30, headers={
+    "Referer": f"{BASE_URL}/shared/aspx/app_logon.aspx"
+})
 page.raise_for_status()
-html = page.text
 
 # Sanity check: if we got bounced back to the login form, creds/URL are off
 if "app_logon" in html.lower() and "In Production" not in html:
