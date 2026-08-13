@@ -18,7 +18,7 @@ STATUSES = [
 session = requests.Session()
 session.headers.update({"User-Agent": "Mozilla/5.0 (jobs-log-bot)"})
 
-# 1. Log in
+# 1. Log in (don't follow the redirect — just capture the session cookies)
 login_url = f"{BASE_URL}/shared/aspx/app_logon.aspx"
 resp = session.post(login_url, data={
     "sessionid": "",
@@ -26,8 +26,11 @@ resp = session.post(login_url, data={
     "pwd": PWD,
     "target": "",
     "id": "",
-}, timeout=30)
-resp.raise_for_status()
+}, timeout=30, allow_redirects=False)
+
+# Accept the login response whether it's a 200 or a 302 redirect
+if resp.status_code not in (200, 302):
+    resp.raise_for_status()
 
 # 2. Fetch the jobs_log page (session cookie carries automatically)
 page_url = f"{BASE_URL}/rpsigns/aspx/default.aspx?xml=jobs_log"
