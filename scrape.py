@@ -37,6 +37,8 @@ page_url = f"{BASE_URL}/rpsigns/aspx/default.aspx?xml=jobs_log"
 page = session.get(page_url, timeout=30, headers={
     "Referer": f"{BASE_URL}/shared/aspx/app_logon.aspx"
 })
+print("STATUS:", page.status_code)
+print("BODY (first 1500 chars):", page.text[:1500])
 page.raise_for_status()
 
 # Sanity check: if we got bounced back to the login form, creds/URL are off
