@@ -46,12 +46,11 @@ if resp.status_code not in (200, 302):
 
 # 2. Fetch the jobs_log page
 page_url = f"{BASE_URL}/rpsigns/aspx/default.aspx?xml=jobs_log"
-page = session.get(page_url, timeout=30, headers={
-    "Referer": f"{BASE_URL}/shared/aspx/app_logon.aspx"
-})
+page = session.get(page_url, timeout=30, headers={"Referer": login_page})
 print("STATUS:", page.status_code)
-print("BODY (first 1500 chars):", page.text[:1500])
 page.raise_for_status()
+
+html = page.text          # <-- this is the missing line
 
 # Sanity check: if we got bounced back to the login form, creds/URL are off
 if "app_logon" in html.lower() and "In Production" not in html:
