@@ -30,7 +30,7 @@ resp = session.post(login_url, data={
 resp.raise_for_status()
 
 # 2. Fetch the jobs_log page (session cookie carries automatically)
-page_url = f"{BASE_URL}/default.aspx?xml=jobs_log"
+page_url = f"{BASE_URL}/rpsigns/aspx/default.aspx?xml=jobs_log"
 page = session.get(page_url, timeout=30)
 page.raise_for_status()
 html = page.text
