@@ -22,7 +22,6 @@ session.headers.update({"User-Agent": "Mozilla/5.0 (jobs-log-bot)"})
 login_page = f"{BASE_URL}/rpsigns/aspx/default.aspx?xml=app_logon"
 pre = session.get(login_page, timeout=30)
 print("PRE-LOGIN status:", pre.status_code)
-print("PRE-LOGIN cookies:", session.cookies.get_dict())
 
 # 1. Log in
 login_url = f"{BASE_URL}/shared/aspx/app_logon.aspx"
@@ -34,11 +33,10 @@ resp = session.post(login_url, data={
     "id": "",
 }, timeout=30, allow_redirects=False, headers={"Referer": login_page})
 
+# Status codes only. This repo is public, so its Actions logs are too — never
+# print cookies, headers, or response bodies here: a logged-in session cookie
+# in a log is as good as the password until it expires.
 print("LOGIN status:", resp.status_code)
-print("LOGIN Location:", resp.headers.get("Location"))
-print("LOGIN Set-Cookie:", resp.headers.get("Set-Cookie"))
-print("COOKIES AFTER LOGIN:", session.cookies.get_dict())
-print("LOGIN BODY (first 500):", resp.text[:500])
 
 # Accept the login response whether it's a 200 or a 302 redirect
 if resp.status_code not in (200, 302):
